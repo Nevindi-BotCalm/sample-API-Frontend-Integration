@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import Navigation from '@/components/Navigation';
 import { ROUTES } from '@/constants/routes.constant';
-import NotificationPopup from '@/components/NotificationPopup';
+import { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient();
 
@@ -22,8 +22,8 @@ function App() {
               </Routes>
             </Suspense>
           </main>
-          <NotificationPopup />
         </div>
+        <Toaster position="top-right" />
       </BrowserRouter>
     </QueryClientProvider>
   );

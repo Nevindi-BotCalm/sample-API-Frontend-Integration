@@ -124,7 +124,7 @@ export function CartViewDialog({
         <div className="space-y-6 p-6">
           {/* Product Info */}
           <div className="flex gap-4">
-            <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+            <div className="relative h-24 w-24  overflow-hidden rounded-lg bg-gray-100">
               <img
                 src={cart.thumbnail}
                 alt={cart.title}
@@ -220,7 +220,7 @@ export default function Demo() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="flex min-h-screen items-center justify-center  from-blue-50 to-indigo-100 p-4">
       <button
         onClick={() => setOpen(true)}
         className="rounded-lg bg-gray-900 px-6 py-3 font-medium text-white shadow-lg transition-colors hover:bg-gray-800"
