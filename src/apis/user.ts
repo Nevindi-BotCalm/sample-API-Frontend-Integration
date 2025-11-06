@@ -3,7 +3,7 @@ import { User } from '../app/payments/columns';
 
 export async function fetchUsers(): Promise<User[]> {
   try {
-    const response = await apiClient.get('/users?limit=208');
+    const response = await apiClient.get('/users');
     return response.data.users;
   } catch (error) {
     console.error('Fetch users error:', error);
@@ -13,7 +13,7 @@ export async function fetchUsers(): Promise<User[]> {
 
 export async function addUser(user: Omit<User, 'id'>): Promise<User> {
   try {
-    const response = await apiClient.post('/users/add', user);
+    const response = await apiClient.post('/users', user);
     return response.data;
   } catch (error) {
     console.error('Add user error:', error);
