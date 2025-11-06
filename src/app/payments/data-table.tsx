@@ -25,7 +25,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { Button } from '@/components/ui/button';
 import { SearchBox } from '@/components/ui/customize-ui/search-box';
 import { Loading } from '@/components/ui/loading';
 import { DataTablePagination } from '@/components/DataTablePagination';
@@ -78,15 +77,20 @@ export function DataTable<TData, TValue>({
   });
 
   const selectedRows = table.getFilteredSelectedRowModel().rows;
-  const selectedCarts = new Set(selectedRows.map(row => row.index));
+  const selectedCarts = new Set(selectedRows.map((row) => row.index));
 
   const handleBulkDelete = () => {
-    console.log('Bulk delete cart items:', selectedRows.map(row => row.original));
+    console.log(
+      'Bulk delete cart items:',
+      selectedRows.map((row) => row.original)
+    );
     setRowSelection({});
   };
 
   const handleCopyCartIds = () => {
-    const cartIds = selectedRows.map(row => (row.original as Cart).cartId).join(', ');
+    const cartIds = selectedRows
+      .map((row) => (row.original as Cart).cartId)
+      .join(', ');
     navigator.clipboard.writeText(cartIds);
     console.log('Copied cart IDs:', cartIds);
   };
@@ -97,9 +101,7 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center gap-4">
           <SearchBox
             placeholder="Search by product title..."
-            value={
-              (table.getColumn('title')?.getFilterValue() as string) ?? ''
-            }
+            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
             onChange={(value) => {
               setSearchLoading(true);
               setTimeout(() => {
