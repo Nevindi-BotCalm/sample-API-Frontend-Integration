@@ -82,7 +82,11 @@ app.delete('/api/users/:id', async (req, res) => {
 // Fetch all notifications
 app.get('/api/notifications', async (req, res) => {
   try {
-    const notifications = await db.collection('notifications').find().sort({ timestamp: -1 }).toArray();
+    const notifications = await db
+      .collection('notifications')
+      .find()
+      .sort({ timestamp: -1 })
+      .toArray();
     res.json({ notifications });
   } catch (error) {
     console.error(error);
@@ -104,7 +108,9 @@ app.post('/api/notifications', async (req, res) => {
 // Update notification (mark as read)
 app.put('/api/notifications/:id', async (req, res) => {
   try {
-    await db.collection('notifications').updateOne({ _id: new ObjectId(req.params.id) }, { $set: req.body });
+    await db
+      .collection('notifications')
+      .updateOne({ _id: new ObjectId(req.params.id) }, { $set: req.body });
     res.json({ ...req.body, _id: req.params.id });
   } catch (error) {
     console.error(error);
@@ -115,7 +121,9 @@ app.put('/api/notifications/:id', async (req, res) => {
 // Delete notification
 app.delete('/api/notifications/:id', async (req, res) => {
   try {
-    await db.collection('notifications').deleteOne({ _id: new ObjectId(req.params.id) });
+    await db
+      .collection('notifications')
+      .deleteOne({ _id: new ObjectId(req.params.id) });
     res.json({ message: 'Notification deleted' });
   } catch (error) {
     console.error(error);

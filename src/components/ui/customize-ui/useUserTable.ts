@@ -13,7 +13,7 @@ import { useUserStore, User } from '@/store/userStore';
 import { getColumns } from '@/components/user/columns';
 
 export function useUserTable(searchTerm: string, handleEdit?: (index: number) => void, handleDelete?: (index: number) => void, handleView?: (index: number) => void) {
-  const { users, addUser, updateUser, deleteUser } = useUserStore();
+  const { users, addUser, updateUser, deleteUser, fetchUsers } = useUserStore();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [viewingUser, setViewingUser] = useState<User | null>(null);
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
@@ -60,6 +60,10 @@ export function useUserTable(searchTerm: string, handleEdit?: (index: number) =>
     onRowSelectionChange: setRowSelection,
     state: { sorting, columnFilters, columnVisibility, rowSelection },
   });
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     table.setGlobalFilter(searchTerm);

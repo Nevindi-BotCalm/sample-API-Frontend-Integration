@@ -54,7 +54,10 @@ export default function AddUserTable() {
     if (selectedIndices.length > 0) {
       selectedIndices
         .sort((a, b) => b - a)
-        .forEach((index) => userTable.deleteUser(index));
+        .forEach((index) => {
+          const user = userTable.users[index];
+          if (user?._id) userTable.deleteUser(user._id);
+        });
       userTable.setRowSelection({});
       showMessage(
         'success',
