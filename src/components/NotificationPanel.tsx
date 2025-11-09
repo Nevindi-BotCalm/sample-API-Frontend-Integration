@@ -4,24 +4,29 @@ import { useNotificationStore } from '../store/notificationStore';
 import { useState, useEffect } from 'react';
 
 export default function NotificationPanel() {
-  const { notifications, markAsRead, deleteNotification, markAllAsRead, clearAllNotifications } = useNotificationStore();
+  const { notifications, markAsRead, deleteNotification, markAllAsRead, clearAllNotifications, fetchNotifications } = useNotificationStore();
   const [showDropdown, setShowDropdown] = useState(false);
   const unreadCount = notifications.filter(n => !n.read).length;
+
+  useEffect(() => {
+    fetchNotifications().catch(err => console.error('Fetch notifications error:', err));
+  }, [fetchNotifications]);
 
   return (
     <div className="relative">
       <Button 
         variant="outline" 
         size="sm" 
-        className="relative" 
+        className="relative gap-2" 
         onClick={() => setShowDropdown(!showDropdown)}
       >
-        <Bell className="h-4 w-4" />
-        {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs text-white flex items-center justify-center font-bold">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
+        <div className="relative">
+          <Bell className="h-4 w-4" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+          )}
+        </div>
+        <span className="text-sm">Notifications ({unreadCount})</span>
       </Button>
       
       {showDropdown && (
@@ -46,7 +51,7 @@ export default function NotificationPanel() {
               ) : (
                 notifications.map((notification) => (
                   <div 
-                    key={notification.id} 
+                    key={notification._id} 
                     className={`p-3 border-b hover:bg-gray-50 group relative ${
                       !notification.read ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
                     }`}
@@ -54,11 +59,11 @@ export default function NotificationPanel() {
                     <div className="flex justify-between items-start">
                       <div 
                         className="flex-1 cursor-pointer"
-                        onClick={() => markAsRead(notification.id)}
+                        onClick={() => markAsRead(notification._id!)}
                       >
                         <div className="flex items-center gap-2">
                           {!notification.read && (
-                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                           )}
                           <p className={`text-sm ${
                             !notification.read ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'
@@ -73,7 +78,7 @@ export default function NotificationPanel() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          deleteNotification(notification.id);
+                          deleteNotification(notification._id!);
                         }}
                         className="opacity-0 group-hover:opacity-100 ml-2 text-gray-400 hover:text-red-500 transition-all p-1"
                         title="Delete notification"

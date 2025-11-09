@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 import NotificationDemo from '@/components/NotificationDemo';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { ActivityChart } from '@/components/dashboard/ActivityChart';
-import { RecentActivity } from '@/components/dashboard/RecentActivity';
+import { RealTimeNotifications } from '@/components/dashboard/RealTimeNotifications';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { DateNotification } from '@/components/dashboard/DateNotification';
 import { LoadingSpinner } from '@/components/dashboard/LoadingSpinner';
@@ -44,33 +44,7 @@ export default function Dashboard() {
     };
   }, [cartData, users]);
 
-  const recentActivity = useMemo(() => {
-    const activities: any[] = [];
 
-    // Recent cart additions
-    cartData.slice(0, 2).forEach((item: any) => {
-      activities.push({
-        user: item.title,
-        action: `Added to cart - $${item.price}`,
-        time: 'Recently',
-        color: 'bg-blue-100 text-blue-600',
-      });
-    });
-
-    // Recent user registrations
-    users.slice(0, 2).forEach((user: any) => {
-      activities.push({
-        user: user.name,
-        action: `${user.isActive ? 'Active user' : 'Inactive user'} - ${user.department}`,
-        time: 'Recently',
-        color: user.isActive
-          ? 'bg-green-100 text-green-600'
-          : 'bg-red-100 text-red-600',
-      });
-    });
-
-    return activities.slice(0, 4);
-  }, [cartData, users]);
 
   if (cartsLoading) {
     return <LoadingSpinner />;
@@ -120,7 +94,7 @@ export default function Dashboard() {
       {/* Charts and Activity */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <ActivityChart cartData={cartData} />
-        <RecentActivity activities={recentActivity} />
+        <RealTimeNotifications />
       </div>
 
 

@@ -36,7 +36,6 @@ export function UserForm({
   onOpenChange,
   editingUser,
   onSubmit,
-  onSuccess,
 }: UserFormProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -56,7 +55,9 @@ export function UserForm({
       setDepartment(editingUser.department || '');
       setPhone(editingUser.phone || '');
       setIsActive(editingUser.isActive ?? true);
-      setBirthday(editingUser.startDate ? new Date(editingUser.startDate) : undefined);
+      setBirthday(
+        editingUser.startDate ? new Date(editingUser.startDate) : undefined
+      );
     } else {
       setName('');
       setEmail('');
