@@ -3,8 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchCarts } from '@/apis/cart';
 import { useUserStore } from '@/store/userStore';
 import { useMemo, useState } from 'react';
-
-import NotificationDemo from '@/components/NotificationDemo';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { ActivityChart } from '@/components/dashboard/ActivityChart';
 import { RealTimeNotifications } from '@/components/dashboard/RealTimeNotifications';
@@ -84,11 +82,6 @@ export default function Dashboard() {
           trend={`${stats.activeUsers}/${stats.totalUsers} users active`}
           color="bg-purple-500"
         />
-      </div>
-
-      {/* Demo Section */}
-      <div className="mb-6">
-        <NotificationDemo />
       </div>
 
       {/* Charts and Activity */}

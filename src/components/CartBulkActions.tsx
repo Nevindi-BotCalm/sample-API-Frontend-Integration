@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Cart } from '@/app/payments/columns';
-import { Trash2, Copy, ShoppingCart } from 'lucide-react';
+import { Trash2, Copy } from 'lucide-react';
 
 interface Props {
   selectedCarts: Set<number>;
