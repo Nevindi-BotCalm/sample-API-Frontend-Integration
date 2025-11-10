@@ -94,7 +94,7 @@ app.get('/api/notifications', async (req, res) => {
     res.json({ notifications, total: notifications.length });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch notifications', toast: { type: 'error', message: 'Failed to fetch notifications' } });
+    res.status(500).json({ error: 'Failed to fetch notifications' });
   }
 });
 
@@ -103,10 +103,10 @@ app.post('/api/notifications', async (req, res) => {
   try {
     const result = await db.collection('notifications').insertOne(req.body);
     const notification = { ...req.body, _id: result.insertedId };
-    res.json({ notification, toast: { type: 'success', message: 'Notification added successfully' } });
+    res.json({ notification });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to add notification', toast: { type: 'error', message: 'Failed to add notification' } });
+    res.status(500).json({ error: 'Failed to add notification' });
   }
 });
 
@@ -118,10 +118,10 @@ app.put('/api/notifications/:id', async (req, res) => {
       { $set: req.body }
     );
     const notification = { ...req.body, _id: req.params.id };
-    res.json({ notification, toast: { type: 'success', message: 'Notification updated successfully' } });
+    res.json({ notification });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to update notification', toast: { type: 'error', message: 'Failed to update notification' } });
+    res.status(500).json({ error: 'Failed to update notification' });
   }
 });
 
@@ -130,12 +130,12 @@ app.delete('/api/notifications/:id', async (req, res) => {
   try {
     const result = await db.collection('notifications').deleteOne({ _id: new ObjectId(req.params.id) });
     if (result.deletedCount === 0) {
-      return res.status(404).json({ error: 'Notification not found', toast: { type: 'error', message: 'Notification not found' } });
+      return res.status(404).json({ error: 'Notification not found' });
     }
-    res.json({ message: 'Notification deleted', toast: { type: 'success', message: 'Notification deleted successfully' } });
+    res.json({ message: 'Notification deleted' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to delete notification', toast: { type: 'error', message: 'Failed to delete notification' } });
+    res.status(500).json({ error: 'Failed to delete notification' });
   }
 });
 
@@ -143,10 +143,10 @@ app.delete('/api/notifications/:id', async (req, res) => {
 app.delete('/api/notifications', async (req, res) => {
   try {
     const result = await db.collection('notifications').deleteMany({});
-    res.json({ message: 'All notifications cleared', toast: { type: 'success', message: `${result.deletedCount} notifications cleared successfully` } });
+    res.json({ message: 'All notifications cleared', deletedCount: result.deletedCount });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to clear notifications', toast: { type: 'error', message: 'Failed to clear notifications' } });
+    res.status(500).json({ error: 'Failed to clear notifications' });
   }
 });
 
