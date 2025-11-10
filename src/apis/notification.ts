@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { handleBackendToast } from '../utils/helpers';
+import { handleBackendToast, handleApiError } from '../utils/helpers';
 
 const API_BASE = 'http://localhost:5000/api';
 
@@ -17,8 +17,8 @@ export async function fetchNotifications(): Promise<Notification[]> {
     handleBackendToast(response.data.toast);
     return response.data.notifications;
   } catch (error) {
-    console.error('Fetch notifications error:', error);
-    throw new Error('Unable to fetch notifications');
+    handleApiError(error);
+    throw error;
   }
 }
 
@@ -28,8 +28,8 @@ export async function addNotification(notification: Omit<Notification, '_id'>): 
     handleBackendToast(response.data.toast);
     return response.data.notification || response.data;
   } catch (error) {
-    console.error('Add notification error:', error);
-    throw new Error('Unable to add notification');
+    handleApiError(error);
+    throw error;
   }
 }
 
@@ -39,8 +39,8 @@ export async function updateNotification(id: string, notification: Partial<Notif
     handleBackendToast(response.data.toast);
     return response.data.notification || response.data;
   } catch (error) {
-    console.error('Update notification error:', error);
-    throw new Error('Unable to update notification');
+    handleApiError(error);
+    throw error;
   }
 }
 
@@ -49,8 +49,8 @@ export async function deleteNotification(id: string): Promise<void> {
     const response = await axios.delete(`${API_BASE}/notifications/${id}`);
     handleBackendToast(response.data.toast);
   } catch (error) {
-    console.error('Delete notification error:', error);
-    throw new Error('Unable to delete notification');
+    handleApiError(error);
+    throw error;
   }
 }
 
@@ -59,7 +59,7 @@ export async function clearAllNotifications(): Promise<void> {
     const response = await axios.delete(`${API_BASE}/notifications`);
     handleBackendToast(response.data.toast);
   } catch (error) {
-    console.error('Clear notifications error:', error);
-    throw new Error('Unable to clear notifications');
+    handleApiError(error);
+    throw error;
   }
 }

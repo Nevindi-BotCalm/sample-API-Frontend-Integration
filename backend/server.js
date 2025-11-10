@@ -150,4 +150,36 @@ app.delete('/api/notifications', async (req, res) => {
   }
 });
 
+// -------------------- ERROR HANDLING -------------------- //
+
+// 404 - Not Found Handler
+app.use((req, res) => {
+  res.status(404).json({ 
+    error: 'Route not found', 
+    toast: { 
+      type: 'error', 
+      message: `Cannot ${req.method} ${req.originalUrl}` 
+    } 
+  });
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+
+  const statusCode = err.status || 500;
+  const message = err.message || 'Internal server error';
+
+  res.status(statusCode).json({ 
+    error: message, 
+    toast: { 
+      type: 'error', 
+      message: 'Something went wrong. Please try again.' 
+    } 
+  });
+});
+
+
+
+
 

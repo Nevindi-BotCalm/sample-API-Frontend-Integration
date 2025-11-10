@@ -1,7 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { User } from '../store/userStore';
-import { handleBackendToast } from '../utils/helpers';
+import { handleBackendToast, handleApiError } from '../utils/helpers';
 
 const API_BASE = 'http://localhost:5000/api';
 
@@ -11,8 +11,8 @@ export async function fetchUsers(): Promise<User[]> {
     handleBackendToast(response.data.toast);
     return response.data.users;
   } catch (error) {
-    console.error('Fetch users error:', error);
-    throw new Error('Unable to fetch users');
+    handleApiError(error);
+    throw error;
   }
 }
 
@@ -22,8 +22,8 @@ export async function addUser(user: User): Promise<User> {
     handleBackendToast(response.data.toast);
     return response.data.user || response.data;
   } catch (error) {
-    console.error('Add user error:', error);
-    throw new Error('Unable to add user');
+    handleApiError(error);
+    throw error;
   }
 }
 
@@ -33,8 +33,8 @@ export async function updateUser(id: string, user: Partial<User>): Promise<User>
     handleBackendToast(response.data.toast);
     return response.data.user || response.data;
   } catch (error) {
-    console.error('Update user error:', error);
-    throw new Error('Unable to update user');
+    handleApiError(error);
+    throw error;
   }
 }
 
