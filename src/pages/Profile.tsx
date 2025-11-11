@@ -1,14 +1,55 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useNavigate } from 'react-router-dom';
-import { User, LogOut, Edit2, Save, X } from 'lucide-react';
+import {
+  User,
+  Camera,
+ 
+} from 'lucide-react';
+import UserForm from '@/components/UserForm';
 
 export default function Profile() {
   const { user, logout, setUser } = useAuthStore();
   const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(user?.name || '');
+  const [firstName, setFirstName] = useState(user?.name?.split(' ')[0] || '');
+  const [lastName, setLastName] = useState(user?.name?.split(' ')[1] || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [username, setUsername] = useState('');
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      name: 'Florence Shaw',
+      email: 'florence@untitledui.com',
+      lastActive: 'Mar 4, 2024',
+      dateAdded: 'July 4, 2022',
+      avatar: 'FS',
+    },
+    {
+      id: 2,
+      name: 'Amélie Laurent',
+      email: 'amelie@untitledui.com',
+      lastActive: 'Mar 4, 2024',
+      dateAdded: 'July 4, 2022',
+      avatar: 'AL',
+    },
+    {
+      id: 3,
+      name: 'Anna Kowalski',
+      email: 'anna@untitledui.com',
+      lastActive: 'Mar 2, 2024',
+      dateAdded: 'July 4, 2022',
+      avatar: 'AK',
+    },
+    {
+      id: 4,
+      name: 'Candice Wu',
+      email: 'candice@untitledui.com',
+      lastActive: 'Mar 5, 2024',
+      dateAdded: 'July 4, 2022',
+      avatar: 'CW',
+    },
+  ]);
 
   const handleLogout = () => {
     logout();
@@ -17,15 +58,37 @@ export default function Profile() {
 
   const handleSave = () => {
     if (user) {
-      setUser({ ...user, name, email });
-      setIsEditing(false);
+      setUser({
+        ...user,
+        name: `${firstName} ${lastName}`.trim(),
+        email,
+      });
     }
   };
 
-  const handleCancel = () => {
-    setName(user?.name || '');
-    setEmail(user?.email || '');
-    setIsEditing(false);
+  const handleAddUser = (userData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+  }) => {
+    const newUser = {
+      id: users.length + 1,
+      name: `${userData.firstName} ${userData.lastName}`.trim(),
+      email: userData.email,
+      lastActive: new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      dateAdded: new Date().toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      avatar: `${userData.firstName[0]}${userData.lastName[0]}`.toUpperCase(),
+    };
+    setUsers([...users, newUser]);
   };
 
   if (!user) {
@@ -33,100 +96,117 @@ export default function Profile() {
   }
 
   return (
-    <div className="ml-16 p-8">
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold">Profile</h1>
-          <div className="flex gap-2">
-            {!isEditing ? (
-              <>
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  <Edit2 className="w-4 h-4" />
-                  Edit
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={handleSave}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-                >
-                  <Save className="w-4 h-4" />
-                  Save
-                </button>
-                <button
-                  onClick={handleCancel}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                  Cancel
-                </button>
-              </>
-            )}
-          </div>
+    <div className="mt-25 ml-16 p-8">
+      <div className="mx-auto max-w-md rounded-lg bg-white p-6 shadow-lg">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">{user.name}</h2>
+          <p className="text-sm text-gray-500">{user.email}</p>
         </div>
-        
-        <div className="flex items-center gap-6 mb-8">
-          <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center">
-            <User className="w-12 h-12 text-white" />
-          </div>
-          <div className="flex-1">
-            {isEditing ? (
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full text-2xl font-semibold px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Name"
-                />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full text-gray-600 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Email"
-                />
-              </div>
-            ) : (
-              <>
-                <h2 className="text-2xl font-semibold">{user.name}</h2>
-                <p className="text-gray-600">{user.email}</p>
-              </>
-            )}
-          </div>
-        </div>
-        
+
         <div className="space-y-4">
-          <div className="border-t pt-4">
-            <h3 className="text-lg font-semibold mb-4">Account Information</h3>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-gray-600">User ID</p>
-                <p className="font-medium">{user.id}</p>
+          <div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Profile photo
+              </label>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gray-200">
+                    <User className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <button
+                    title="Change profile photo"
+                    className="absolute -right-1 -bottom-1 flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white hover:bg-gray-50"
+                  >
+                    <Camera className="h-3 w-3 text-gray-600" />
+                  </button>
+                </div>
+                <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
+                  Click to replace
+                </button>
               </div>
-              <div>
-                <p className="text-sm text-gray-600">Name</p>
-                <p className="font-medium">{user.name}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Email</p>
-                <p className="font-medium">{user.email}</p>
-              </div>
+            </div>
+            <br></br>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Name
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="Amélie"
+              />
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="Laurent"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Email address
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="amelie@untitledui.com"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Username
+            </label>
+            <div className="flex">
+              <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">
+                untitledui.com/
+              </span>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="flex-1 rounded-r-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="amelie"
+              />
             </div>
           </div>
         </div>
+
+        <div className="mt-6 flex justify-between">
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700"
+          >
+            LOGOUT
+          </button>
+          <div className="flex gap-3">
+            <button className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            >
+              Save changes
+            </button>
+          </div>
+        </div>
       </div>
+
+      <UserForm
+        isOpen={showAddUserModal}
+        onClose={() => setShowAddUserModal(false)}
+        onSave={handleAddUser}
+        title="Add new user"
+      />
     </div>
   );
 }

@@ -23,10 +23,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-black/50">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
         <div className="flex items-center justify-center mb-8">
-          <LogIn className="w-12 h-12 text-blue-600" />
+          <LogIn className="w-12 h-12 text-black" />
         </div>
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
         
@@ -65,7 +65,7 @@ export default function Login() {
           
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-700 transition-colors cursor-pointer"
           >
             Login
           </button>

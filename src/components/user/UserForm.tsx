@@ -98,7 +98,7 @@ export function UserForm({
 
     // Validate name
     if (!name) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'Name is required'; 
     } else {
       try {
         z.string().min(2, 'Name must be at least 2 characters').parse(name);
